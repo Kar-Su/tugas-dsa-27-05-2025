@@ -1,5 +1,8 @@
 #include <iostream>
+#include <memory>
 
+
+// data mahasiswa
 struct mahasiswa {
   std::string nim;
   std::string nama;
@@ -7,18 +10,23 @@ struct mahasiswa {
   float ipk;
 };
 
+
 int main() 
 {
-  mahasiswa helmi;
-  helmi.nim = "c030324037";
-  helmi.nama = "Muhammad Helmi";
-  helmi.alamat = "Sungai Miai";
-  helmi.ipk = 2.30;
+  // Inisialisasi mahasiswa menggunakan smart pointer
+  std::unique_ptr<mahasiswa> ptrMahasiswa = std::make_unique<mahasiswa>();
 
-  std::cout << helmi.nim << "\n";
-  std::cout << helmi.nama << "\n";
-  std::cout << helmi.alamat << "\n";
-  std::cout << helmi.ipk << "\n";
-  
+  // Assign data mahasiswa
+  ptrMahasiswa -> nim = "C030324037";
+  ptrMahasiswa -> nama = "Muhammad Helmi";
+  ptrMahasiswa -> alamat = "Sungai Miai";
+  ptrMahasiswa -> ipk = 2.3;
+
+  // Menampilkan Value dari data mahasiswa
+  std::cout << ptrMahasiswa -> nama << std::endl;
+  std::cout << ptrMahasiswa -> nim << std::endl;
+  std::cout << ptrMahasiswa -> alamat << std::endl;
+  std::cout << ptrMahasiswa -> ipk << std::endl;
+
   return 0;
 }
