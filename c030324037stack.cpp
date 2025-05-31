@@ -1,5 +1,6 @@
 #include<iostream>
 #include<memory>
+#include <stdexcept>
 
 // Init bagian data
 using itemType = int;
@@ -27,17 +28,25 @@ namespace stack
 
 int main()
 {
-  // Init myPtr
-  myPtr ptrStack = std::make_unique<dataStack>();
-  
-  // Program stack
-  stack::init(ptrStack);
-  stack::push(ptrStack, 5);
-  stack::push(ptrStack, 7);
-  stack::push(ptrStack, 10);
-  stack::push(ptrStack, 35);
-  stack::pop(ptrStack);
-  stack::display(ptrStack);
+  try{
+    // Init myPtr
+    myPtr ptrStack = std::make_unique<dataStack>();
+    
+    // Program stack
+    stack::init(ptrStack);
+    stack::push(ptrStack, 5);
+    stack::push(ptrStack, 7);
+    stack::push(ptrStack, 10);
+    stack::push(ptrStack, 35);
+    stack::pop(ptrStack);
+    stack::display(ptrStack);
+  }
+  catch(const std::logic_error &e){
+    std::cerr << "Logic Err: " << e.what() << std::endl;
+}
+  catch(const std::exception &e){
+    std::cerr << "Other Err: " << e.what() << std::endl;
+  }
   
   return 0;
 }
@@ -56,16 +65,16 @@ void stack::push(myPtr &S, itemType x)
   Fungsi untuk push data ke stack. Dimana ada safety untuk cek apakah stacknya full atau tidak.
   Logika yang dipakai yaitu dengan mengguankan count sebagai head dari stack.
      */
-
-  if(stack::isFull(S)){
-    std::cout << "Stack penuh, data tidak bisa dimasukkan!" << std::endl;
-    return;
-  }
-
-  S -> item[S -> count] = x;
-  ++(S -> count);
-  std::cout << "Push data " << x << " berhasil!" << std::endl;
+  if (stack::isFull(S)){
+    throw std::logic_error("Stack penuh, Gagal memasukkan data!");
+  } 
+  else{
+    S -> item[S -> count] = x;
+    ++(S -> count);
+    std::cout << "Push data " << x << " berhasil!" << std::endl;
+  } 
 }
+
 
 
 void stack::pop(myPtr &S)
@@ -75,15 +84,16 @@ void stack::pop(myPtr &S)
   Logika yang dipakai tidak secara langsung menghapus data dari head sebelumnya.
   Akan tetapi mengurangi count ke stack sebelumnya.
   */
-
   if (stack::isEmpty(S)){
-    std::cout << "Stack masih kosong!" << std::endl;
-    return;
+    // std::cout << "Stack masih kosong!" << std::endl;
+    // return;
+    throw std::logic_error("Stack Kosong, Gagal melakukan pop!");
+  } 
+  else{
+    --(S -> count);
+    itemType dataPopped = S -> item[S -> count];
+    std::cout << "Pop data " << dataPopped << " berhasil!" << std::endl;
   }
-
-  --(S -> count);
-  itemType dataPopped = S -> item[S -> count];
-  std::cout << "Pop data " << dataPopped << " berhasil!" << std::endl;
 }
 
 
